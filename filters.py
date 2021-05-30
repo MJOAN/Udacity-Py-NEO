@@ -165,16 +165,16 @@ def create_filters(date=None, start_date=None, end_date=None,
     
     #for _ in range(9):   ## pseudo 
     #    if DiameterFilter.__call__( operator.le(approach.neo.diameter, diameter_min)) :
-    #        filters_collection['diameter_min'] = DiameterFilter.get(approach.neo.diameter)
+    #        query_collection['diameter_min'] = DiameterFilter.get(approach.neo.diameter)
     #    if DiameterFilter.__call__( operator.ge(approach.neo.diameter, diameter_max)) :
-    #        filters_collection['diameter_max'] = DiameterFilter.get(approach.neo.diameter)
+    #        query_collection['diameter_max'] = DiameterFilter.get(approach.neo.diameter)
     #    if VelocityFilter.__call__( operator.le(approach.neo.velocity, velocity_min)) :
-    #        filters_collection['velocity_min'] = VelocityFilter.get(approach.neo.velocity)
+    #        query_collection['velocity_min'] = VelocityFilter.get(approach.neo.velocity)
     # .. ... 
               
   
                          
-    return filters_collection
+    return query_collection
 
 
 def limit(iterator, n=None):
