@@ -90,7 +90,7 @@ class AttributeFilter:
     class Diameter(AttributeFilter): # NEO
         @classmethod
         def get(cls, approach):
-            return approach.neo.velocity
+            return approach.neo.diameter
 
     class Hazardous(AttributeFilter): # NEO
         @classmethod
