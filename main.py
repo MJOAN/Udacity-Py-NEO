@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Explore a dataset of near-Earth objects and their close approaches to Earth.
+######################## main.py was contributed by Udacity Team ########################
 
+"""Explore a dataset of near-Earth objects and their close approaches to Earth.
 See `README.md` for a detailed discussion of this project.
 
 This script can be invoked from the command line::
