@@ -82,17 +82,17 @@ class AttributeFilter:
         def get(self, approach):
             return approach.neo.distance 
 
-    class Velocity(AttributeFilter):  # CAD
+    class VelocityFilter(AttributeFilter):  # CAD
         @classmethod
         def get(cls, approach):
             return approach.neo.velocity
 
-    class Diameter(AttributeFilter): # NEO
+    class DiameterFilter(AttributeFilter): # NEO
         @classmethod
         def get(cls, approach):
             return approach.neo.diameter
 
-    class Hazardous(AttributeFilter): # NEO
+    class HazardousFilter(AttributeFilter): # NEO
         @classmethod
         def get(cls, approach):
             return approach.neo.hazardous
@@ -134,26 +134,31 @@ def create_filters(date=None, start_date=None, end_date=None,
     """
   
     # list of arg names 
-    params = ['date', 'start_date', 'end_date', 'distance_min', 'distance_max', 'velocity_min', 'velocity_max', 
-              'diameter_min', 'diameter_max', 'hazardous']
+    #params = ['date', 'start_date', 'end_date', 'distance_min', 'distance_max', 'velocity_min', 'velocity_max', 
+    #          'diameter_min', 'diameter_max', 'hazardous']
     
     # convert arg values to list
-    params_values = [x for x in args if x else None]
+    #params_values = [x for x in args if x else None]
     
     # zip arg values to dict
-    params_dict = dict( zip( params, params_values ))
+    #params_dict = dict( zip( params, params_values ))
     
     # filter where None, and convert to list of tuples 
-    filters_collection = [ (k, v) for k, v in params_dict.items() if v is not None ]
-    print( 'collection_filter', collection_filters ) 
+    #filters_collection = [ (k, v) for k, v in params_dict.items() if v is not None ]
     
-    #for x in range(9):
-    #    for y in AttributeFilter.__call__():
-    #        if collections_filters[x] == AttributeFilter.__call__(approach):
-    #            filters_tuple.add(x)
+    result = []
+    filters_collection = {}
+    
+    #for _ in range(9):   ## pseudo 
+    #    if DiameterFilter.__call__( operator.le(approach.neo.diameter, diameter_min)) :
+    #        filters_collection['diameter_min'] = DiameterFilter.get(approach.neo.diameter)
+    #    if DiameterFilter.__call__( operator.ge(approach.neo.diameter, diameter_max)) :
+    #        filters_collection['diameter_max'] = DiameterFilter.get(approach.neo.diameter)
+    #    if VelocityFilter.__call__( operator.le(approach.neo.velocity, velocity_min)) :
+    #        filters_collection['velocity_min'] = VelocityFilter.get(approach.neo.velocity)
+    # .. ... 
     
     return filters_collection
-    ## pseudo code ###
 
 
 def limit(iterator, n=None):
