@@ -134,20 +134,34 @@ def create_filters(date=None, start_date=None, end_date=None,
     """
   
     # list of arg names 
-    #params = ['date', 'start_date', 'end_date', 'distance_min', 'distance_max', 'velocity_min', 'velocity_max', 
+    params = ['date', 'start_date', 'end_date', 'distance_min', 'distance_max', 'velocity_min', 'velocity_max', 
     #          'diameter_min', 'diameter_max', 'hazardous']
     
     # convert arg values to list
-    #params_values = [x for x in args if x else None]
+    params_values = [x for x in args if x else None]
     
     # zip arg values to dict
-    #params_dict = dict( zip( params, params_values ))
+    params_dict = dict( zip( params, params_values ))
     
     # filter where None, and convert to list of tuples 
-    #filters_collection = [ (k, v) for k, v in params_dict.items() if v is not None ]
-    
+    filters_collection = [ (k, v) for k, v in params_dict.items() if v is not None ]
+   
+    # filters_collection looks like:           
+    #[('date', 20120101),
+    #('start_date', 20130101),
+    #('end_date', 'None'), ..... )]
+              
     result = []
-    filters_collection = {}
+    query_collection = {}
+              
+    for filters in collection_filters:
+        if filters[0] == 'distance_min':
+            if DistanceFilter.__call__( operator.le( approach.neo.distance, filters[1])) :
+                query_collection['diameter_min'] = DistanceFilter.get(approach.neo.diameter)
+              
+        if filters[0] == 'distance_max':
+            if DistanceFilter.__call__( operator.le( approach.neo.distance, filters[1])) :
+                query_collection['diameter_min'] = DistanceFilter.get(approach.neo.diameter)
     
     #for _ in range(9):   ## pseudo 
     #    if DiameterFilter.__call__( operator.le(approach.neo.diameter, diameter_min)) :
@@ -157,7 +171,9 @@ def create_filters(date=None, start_date=None, end_date=None,
     #    if VelocityFilter.__call__( operator.le(approach.neo.velocity, velocity_min)) :
     #        filters_collection['velocity_min'] = VelocityFilter.get(approach.neo.velocity)
     # .. ... 
-    
+              
+  
+                         
     return filters_collection
 
 
