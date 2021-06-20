@@ -18,9 +18,10 @@ You'll edit this file in Tasks 3a and 3c.
 """
 import operator
 
-######### Code References:##########################################################
-## 1. Martijn Pieters, Stack Overflow: https://stackoverflow.com/questions/16814984/python-list-iterator-behavior-and-nextiterator
-#####################################################################################
+######### Code References:#################################################################################################################
+## 1. Martijn Pieters, Stack Overflow: Reference: https://stackoverflow.com/questions/16814984/python-list-iterator-behavior-and-nextiterator
+## 2. Shuaishuai, Udacity Mentor Board, Reference: https://knowledge.udacity.com/questions/599130 
+############################################################################################################################################
 
 
 class UnsupportedCriterionError(NotImplementedError):
@@ -135,46 +136,99 @@ def create_filters(date=None, start_date=None, end_date=None,
   
     # list of arg names 
     params = ['date', 'start_date', 'end_date', 'distance_min', 'distance_max', 'velocity_min', 'velocity_max', 
-    #          'diameter_min', 'diameter_max', 'hazardous']
+               'diameter_min', 'diameter_max', 'hazardous']
     
     # convert arg values to list
     params_values = [x for x in args if x else None]
     
     # zip arg values to dict
-    params_dict = dict( zip( params, params_values ))
-    
+    filter_dict = dict( zip( params, params_values )) 
+
     # filter where None, and convert to list of tuples 
-    filters_collection = [ (k, v) for k, v in params_dict.items() if v is not None ]
+    # filters_collection = [ (k, v) for k, v in params_dict.items() if v is not None ]
    
     # filters_collection looks like:           
     #[('date', 20120101),
     #('start_date', 20130101),
     #('end_date', 'None'), ..... )]
+
+    # params_dict looks like:
+    # {'date': 20120101,
+    # 'start_date': 20130101,
+    # 'end_date': 'None', ...}
               
     result = []
     query_collection = {}
               
-    for filters in collection_filters:
-        if filters[0] == 'distance_min':
-            if DistanceFilter.__call__( operator.le( approach.neo.distance, filters[1])) :
-                query_collection['diameter_min'] = DistanceFilter.get(approach.neo.diameter)
-              
-        if filters[0] == 'distance_max':
-            if DistanceFilter.__call__( operator.le( approach.neo.distance, filters[1])) :
-                query_collection['diameter_min'] = DistanceFilter.get(approach.neo.diameter)
-    
-    #for _ in range(9):   ## pseudo 
-    #    if DiameterFilter.__call__( operator.le(approach.neo.diameter, diameter_min)) :
-    #        query_collection['diameter_min'] = DiameterFilter.get(approach.neo.diameter)
-    #    if DiameterFilter.__call__( operator.ge(approach.neo.diameter, diameter_max)) :
-    #        query_collection['diameter_max'] = DiameterFilter.get(approach.neo.diameter)
-    #    if VelocityFilter.__call__( operator.le(approach.neo.velocity, velocity_min)) :
-    #        query_collection['velocity_min'] = VelocityFilter.get(approach.neo.velocity)
-    # .. ... 
-              
-  
-                         
-    return query_collection
+    # possibly you don't need to collect params to dict 
+    for key, value in filter_dict.items():
+
+        # neeed clarity on which operator eq, ge, le to use for each
+        # iterate over params dictionary 
+        # call our Filter subclasses with operator and value from user param 
+        # update our query collection dictionary with key and value from call
+        if bool(filter_dict.get('date')):
+            date_filter = DateFilter(operator.eq,  filter_dict.get('date')  ))  # 2
+            query_collection.update( { 'date':  date_filter  } )
+
+        if bool(filter_dict.get('start_date')):
+            start_date_filter = DateFilter(operator.le,  filter_dict.get('start_date')  ))
+            query_collection.update( { 'start_date':  start_date_filter  } )
+
+        if bool(filter_dict.get('end_date')):
+            end_date_filter = DateFilter(operator.ge,  filter_dict.get('end_date')  ))
+            query_collection.update( { 'end_date':  end_date_filter  } )
+
+        if bool(filter_dict.get('distance_min')):
+            distance_min_filter = DistanceFilter(operator.ge,  filter_dict.get('distance_min')  ))
+            query_collection.update( { 'distance_min':  distance_min_filter  } )
+
+        if bool(filter_dict.get('distance_max')):
+            distance_max_filter = DistanceFilter(operator.le,  filter_dict.get('distance_max')  ))
+            query_collection.update( { 'distance_max':  distance_max_filter  } )
+
+        if bool(filter_dict.get('velocity_min')):
+            velocity_min_filter = VelocityFilter(operator.ge,  filter_dict.get('velocity_min')  ))
+            query_collection.update( { 'velocity_min':  velocity_min_filter  } )
+
+        if bool(filter_dict.get('velocity_max')):
+            velocity_max_filter = VelocityFilter(operator.le,  filter_dict.get('velocity_max')  ))
+            query_collection.update( { 'velocity_max':  velocity_max_filter  } )
+
+        if bool(filter_dict.get('diameter_min')):
+            diameter_min_filter = DiameterFilter(operator.ge,  filter_dict.get('diameter_min')  ))
+            query_collection.update( { 'diameter_min':  diameter_min_filter  } )
+
+        if bool(filter_dict.get('diameter_max')):
+            diameter_max_filter = DiameterFilter(operator.le,  filter_dict.get('diameter_max')  ))
+            query_collection.update( { 'diameter_max':  diameter_max_filter  } )
+
+        if bool(filter_dict.get('hazardous')):
+            hazardous_filter = HazardousFilter(operator.eq,  filter_dict.get('hazardous')  ))
+            query_collection.update( { 'hazardous':  hazardous_filter  } )
+
+    # land results to our result list and return
+    result.append(query_collection)                     
+    return result
+
+
+        ### trying to understand how to setup method
+        #for _ in range(9):   ## pseudo 
+        #    if DiameterFilter.__call__( operator.le(approach.neo.diameter, diameter_min)) :
+        #        query_collection['diameter_min'] = DiameterFilter.get(approach.neo.diameter)
+        #    if DiameterFilter.__call__( operator.ge(approach.neo.diameter, diameter_max)) :
+        #        query_collection['diameter_max'] = DiameterFilter.get(approach.neo.diameter)
+        #    if VelocityFilter.__call__( operator.le(approach.neo.velocity, velocity_min)) :
+        #        query_collection['velocity_min'] = VelocityFilter.get(approach.neo.velocity)
+        # .. ... 
+
+        ## 1st attempt if using collection tuple
+        # if DistanceFilter.__call__( operator.le( approach.neo.distance, filters[1])) :
+        #     query_collection['diameter_min'] = DistanceFilter.get(approach.neo.diameter)
+        # if filters[0] == 'distance_max':
+        #     if DistanceFilter.__call__( operator.le( approach.neo.distance, filters[1])) :
+        #         query_collection['diameter_min'] = DistanceFilter.get(approach.neo.diameter)
+                
 
 
 def limit(iterator, n=None):

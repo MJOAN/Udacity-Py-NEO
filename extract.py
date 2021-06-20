@@ -17,10 +17,10 @@ import json
 
 from models import NearEarthObject, CloseApproach
 
-######### Code References ###########################################################
-## 1. Vanina W, Udacity Mentor Board, https://knowledge.udacity.com/questions/465782
-## 2. Vanina W, Udacity Mentor Board, https://knowledge.udacity.com/questions/461587
-#####################################################################################
+######### Code References #######################################################################
+## 1,2: Vanina W, Udacity Mentor Board, References: https://knowledge.udacity.com/questions/465782,
+##  https://knowledge.udacity.com/questions/461587
+#################################################################################################
 
 def load_neos(neo_csv_path):
     """Read near-Earth object information from a CSV file.
