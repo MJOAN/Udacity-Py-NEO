@@ -139,7 +139,7 @@ def create_filters(date=None, start_date=None, end_date=None,
                'diameter_min', 'diameter_max', 'hazardous']
     
     # convert arg values to list
-    params_values = [x for x in args if x else None]
+    params_values = [x if x else None for x in params]
     
     # zip arg values to dict
     filter_dict = dict( zip( params, params_values )) 
@@ -168,43 +168,43 @@ def create_filters(date=None, start_date=None, end_date=None,
         # call our Filter subclasses with operator and value from user param 
         # update our query collection dictionary with key and value from call
         if bool(filter_dict.get('date')):
-            date_filter = DateFilter(operator.eq,  filter_dict.get('date')  ))  # 2
+            date_filter = DateFilter(operator.eq,  filter_dict.get('date'))  # 2
             query_collection.update( { 'date':  date_filter  } )
 
         if bool(filter_dict.get('start_date')):
-            start_date_filter = DateFilter(operator.le,  filter_dict.get('start_date')  ))
+            start_date_filter = DateFilter(operator.le,  filter_dict.get('start_date'))
             query_collection.update( { 'start_date':  start_date_filter  } )
 
         if bool(filter_dict.get('end_date')):
-            end_date_filter = DateFilter(operator.ge,  filter_dict.get('end_date')  ))
+            end_date_filter = DateFilter(operator.ge,  filter_dict.get('end_date'))
             query_collection.update( { 'end_date':  end_date_filter  } )
 
         if bool(filter_dict.get('distance_min')):
-            distance_min_filter = DistanceFilter(operator.ge,  filter_dict.get('distance_min')  ))
+            distance_min_filter = DistanceFilter(operator.ge,  filter_dict.get('distance_min'))
             query_collection.update( { 'distance_min':  distance_min_filter  } )
 
         if bool(filter_dict.get('distance_max')):
-            distance_max_filter = DistanceFilter(operator.le,  filter_dict.get('distance_max')  ))
+            distance_max_filter = DistanceFilter(operator.le,  filter_dict.get('distance_max'))
             query_collection.update( { 'distance_max':  distance_max_filter  } )
 
         if bool(filter_dict.get('velocity_min')):
-            velocity_min_filter = VelocityFilter(operator.ge,  filter_dict.get('velocity_min')  ))
+            velocity_min_filter = VelocityFilter(operator.ge,  filter_dict.get('velocity_min'))
             query_collection.update( { 'velocity_min':  velocity_min_filter  } )
 
         if bool(filter_dict.get('velocity_max')):
-            velocity_max_filter = VelocityFilter(operator.le,  filter_dict.get('velocity_max')  ))
+            velocity_max_filter = VelocityFilter(operator.le,  filter_dict.get('velocity_max'))
             query_collection.update( { 'velocity_max':  velocity_max_filter  } )
 
         if bool(filter_dict.get('diameter_min')):
-            diameter_min_filter = DiameterFilter(operator.ge,  filter_dict.get('diameter_min')  ))
+            diameter_min_filter = DiameterFilter(operator.ge,  filter_dict.get('diameter_min'))
             query_collection.update( { 'diameter_min':  diameter_min_filter  } )
 
         if bool(filter_dict.get('diameter_max')):
-            diameter_max_filter = DiameterFilter(operator.le,  filter_dict.get('diameter_max')  ))
+            diameter_max_filter = DiameterFilter(operator.le,  filter_dict.get('diameter_max'))
             query_collection.update( { 'diameter_max':  diameter_max_filter  } )
 
         if bool(filter_dict.get('hazardous')):
-            hazardous_filter = HazardousFilter(operator.eq,  filter_dict.get('hazardous')  ))
+            hazardous_filter = HazardousFilter(operator.eq,  filter_dict.get('hazardous'))
             query_collection.update( { 'hazardous':  hazardous_filter  } )
 
     # land results to our result list and return
