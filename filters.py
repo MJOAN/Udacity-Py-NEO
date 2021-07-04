@@ -17,11 +17,13 @@ iterator.
 You'll edit this file in Tasks 3a and 3c.
 """
 import operator
+import itertools
 
-######### Code References:#################################################################################################################
-## 1. Martijn Pieters, Stack Overflow: Reference: https://stackoverflow.com/questions/16814984/python-list-iterator-behavior-and-nextiterator
-## 2. Shuaishuai, Udacity Mentor Board, Reference: https://knowledge.udacity.com/questions/599130 
-############################################################################################################################################
+######### Code References:##########################################################
+## 1. Martijn Pieters, Stack Overflow: https://stackoverflow.com/questions/16814984/python-list-iterator-behavior-and-nextiterator
+## 2. Shuaishuai, Udacity Mentor Board, https://knowledge.udacity.com/questions/599130 
+## 3. Shuaishuai, Udacity Mentor Board, https://knowledge.udacity.com/questions/624020
+#####################################################################################
 
 
 class UnsupportedCriterionError(NotImplementedError):
@@ -73,32 +75,32 @@ class AttributeFilter:
     def __repr__(self):
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
 
-    class DateFilter(AttributeFilter):   # CAD
-        @classmethod
-        def get(self, approach):
-            return approach.neo.date
+class DateFilter(AttributeFilter):   # CAD       NameError: AttributeFilter not defined 
+    @classmethod
+    def get(self, approach):
+        return approach.time.date()
 
-    class DistanceFilter(AttributeFilter):  # CAD
-        @classmethod
-        def get(self, approach):
-            return approach.neo.distance 
+class DistanceFilter(AttributeFilter):  # CAD
+    @classmethod
+    def get(self, approach):
+        return approach.distance 
 
-    class VelocityFilter(AttributeFilter):  # CAD
-        @classmethod
-        def get(cls, approach):
-            return approach.neo.velocity
+class VelocityFilter(AttributeFilter):  # CAD
+    @classmethod
+    def get(cls, approach):
+        return approach.velocity
 
-    class DiameterFilter(AttributeFilter): # NEO
-        @classmethod
-        def get(cls, approach):
-            return approach.neo.diameter
+class DiameterFilter(AttributeFilter): # NEO
+    @classmethod
+    def get(cls, approach):
+        return approach.neo.diameter
 
-    class HazardousFilter(AttributeFilter): # NEO
-        @classmethod
-        def get(cls, approach):
-            return approach.neo.hazardous
+class HazardousFilter(AttributeFilter): # NEO
+    @classmethod
+    def get(cls, approach):
+        return approach.neo.hazardous
         
-    
+        
 def create_filters(date=None, start_date=None, end_date=None,
                    distance_min=None, distance_max=None,
                    velocity_min=None, velocity_max=None,
@@ -134,7 +136,7 @@ def create_filters(date=None, start_date=None, end_date=None,
     :return: A collection of filters for use with `query`.
     """
   
-    # list of arg names 
+   # list of arg names 
     params = ['date', 'start_date', 'end_date', 'distance_min', 'distance_max', 'velocity_min', 'velocity_max', 
                'diameter_min', 'diameter_max', 'hazardous']
     
@@ -162,11 +164,12 @@ def create_filters(date=None, start_date=None, end_date=None,
               
     # possibly you don't need to collect params to dict 
     for key, value in filter_dict.items():
-
+        
         # neeed clarity on which operator eq, ge, le to use for each
         # iterate over params dictionary 
         # call our Filter subclasses with operator and value from user param 
         # update our query collection dictionary with key and value from call
+        
         if bool(filter_dict.get('date')):
             date_filter = DateFilter(operator.eq,  filter_dict.get('date'))  # 2
             query_collection.update( { 'date':  date_filter  } )
@@ -206,31 +209,11 @@ def create_filters(date=None, start_date=None, end_date=None,
         if bool(filter_dict.get('hazardous')):
             hazardous_filter = HazardousFilter(operator.eq,  filter_dict.get('hazardous'))
             query_collection.update( { 'hazardous':  hazardous_filter  } )
-
     # land results to our result list and return
     result.append(query_collection)                     
     return result
 
-
-        ### trying to understand how to setup method
-        #for _ in range(9):   ## pseudo 
-        #    if DiameterFilter.__call__( operator.le(approach.neo.diameter, diameter_min)) :
-        #        query_collection['diameter_min'] = DiameterFilter.get(approach.neo.diameter)
-        #    if DiameterFilter.__call__( operator.ge(approach.neo.diameter, diameter_max)) :
-        #        query_collection['diameter_max'] = DiameterFilter.get(approach.neo.diameter)
-        #    if VelocityFilter.__call__( operator.le(approach.neo.velocity, velocity_min)) :
-        #        query_collection['velocity_min'] = VelocityFilter.get(approach.neo.velocity)
-        # .. ... 
-
-        ## 1st attempt if using collection tuple
-        # if DistanceFilter.__call__( operator.le( approach.neo.distance, filters[1])) :
-        #     query_collection['diameter_min'] = DistanceFilter.get(approach.neo.diameter)
-        # if filters[0] == 'distance_max':
-        #     if DistanceFilter.__call__( operator.le( approach.neo.distance, filters[1])) :
-        #         query_collection['diameter_min'] = DistanceFilter.get(approach.neo.diameter)
-                
-
-
+    
 def limit(iterator, n=None):
     """Produce a limited stream of values from an iterator.
     If `n` is 0 or None, don't limit the iterator at all.
@@ -239,13 +222,19 @@ def limit(iterator, n=None):
     :yield: The first (at most) `n` values from the iterator.
     """
     if n == 0 or n == None:
-        return
+        return 
     
-    a = iter(iterator(range(n)))  # 1
+    return itertools.islice(iterator, n)    # 3  (use islice from itertools)
     
-    for _ in a:
-        value = next(a)
-        yield(value)
-        
+    # a = iter(iterator(range(n)))  # 1
+    #for _ in a:
+        #value = next(a)    
+        #yield(value)
+       
+      
+
+   
+ 
+   
         
         

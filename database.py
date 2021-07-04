@@ -3,13 +3,16 @@
 A `NEODatabase` holds an interconnected data set of NEOs and close approaches.
 It provides methods to fetch an NEO by primary designation or by name, as well
 as a method to query the set of close approaches that match a collection of
-user-specified criteria. Under normal circumstances, the main module creates 
-one NEODatabase from the data on NEOs and close approaches extracted by
- `extract.load_neos` and `extract.load_approaches`
+user-specified criteria.
+
+Under normal circumstances, the main module creates one NEODatabase from the
+data on NEOs and close approaches extracted by `extract.load_neos` and
+`extract.load_approaches`.
+
+You'll edit this file in Tasks 2 and 3.
 """
 from collections import defaultdict
-from filters import AttributeFilter, DateFilter, DistanceFilter, 
-                    VelocityFilter, DiameterFilter, HazardousFilter
+from filters import AttributeFilter, DateFilter, DistanceFilter, VelocityFilter, DiameterFilter, HazardousFilter
 
 ########### Code References: ####################################################################
 ## 1. Vanina W., Udacity Mentor Board, Reference: https://knowledge.udacity.com/questions/478946
@@ -30,21 +33,26 @@ class NEODatabase:
         :param approaches: A collection of `CloseApproach`es.
         """
 
+        # dict from extract.py line 35
         self._neos = neos                
+        # list of dicts from extract.py line 48
         self._approaches = list(approaches)    
-        self._neo_designations = defaultdict()
-        self._neo_names = defaultdict()
-                
-        for neo in neos:        
+        # options: list of dict or neo_designations[0] or {} or []
+        self._neo_designations = {}
+        # options: list of dict or neo_names[0] or {} or []
+        self._neo_names = {}
+        
+        for neo in self._neos:        
             self._neo_designations[neo.designation] = neo   # 1
             if neo.name:
                 self._neo_names[neo.name] = neo             # 1
                 
-        for approach in approaches:
-            neo = self._neo_designations[approach._designation]  # 1
+        for approach in self._approaches:
+            neo = self._neo_designations[approach._designation]  # 1 
             approach.neo = neo                                       # 1
-            neo.approaches.append(approach)                          
-        
+            neo.approaches.append(approach)     
+            
+            
 #         1st attempt: Tried both for loops with list dict:
 #         for neo in self._neos:         
 #             if neo['pdes']:
@@ -88,15 +96,10 @@ class NEODatabase:
         return None
 
     def get_neo_by_name(self, name):
-        """Find and return an NEO by its name.
-
-        If no match is found, return `None` instead.
-
+        """Find and return an NEO by its name. If no match is found, return `None` 
         Not every NEO in the data set has a name. No NEOs are associated with
-        the empty string nor with the `None` singleton.
-
-        The matching is exact - check for spelling and capitalization if no
-        match is found.
+        the empty string nor with the `None` singleton. The matching is exact - 
+        check for spelling and capitalization if no match is found.
 
         :param name: The name, as a string, of the NEO to search for.
         :return: The `NearEarthObject` with the desired name, or `None`.
@@ -114,16 +117,9 @@ class NEODatabase:
         return None
 
     def query(self, filters=()):
-        """Query close approaches to generate those that match a collection of filters. 
-        
-        This method will be recieving a list of filters requested and called from 
-        the create_filters method then passed in here to filters=()
-
+        """Query close approaches to generate those that match a collection of filters.
         This generates a stream of `CloseApproach` objects that match all of the
-        provided filters.
-
-        If no arguments are provided, generate all known close approaches.
-
+        provided filters. If no arguments are provided, generate all known close approaches.
         The `CloseApproach` objects are generated in internal order, which isn't
         guaranteed to be sorted meaninfully, although is often sorted by time.
 
@@ -133,7 +129,6 @@ class NEODatabase:
         # Generate `CloseApproach` objects that match all of the filters.
         # TODO: flag to set status if filter is None else yield approach
         # TODO: use get_neo_by_designation? 
-        
         flag = True 
 
         for approach in self._approaches:

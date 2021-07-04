@@ -17,10 +17,10 @@ import json
 
 from models import NearEarthObject, CloseApproach
 
-######### Code References #######################################################################
-## 1,2: Vanina W, Udacity Mentor Board, References: https://knowledge.udacity.com/questions/465782,
-##  https://knowledge.udacity.com/questions/461587
-#################################################################################################
+######### Code References ###########################################################
+## 1. Vanina W, Udacity Mentor Board, https://knowledge.udacity.com/questions/465782
+## 2. Vanina W, Udacity Mentor Board, https://knowledge.udacity.com/questions/461587
+#####################################################################################
 
 def load_neos(neo_csv_path):
     """Read near-Earth object information from a CSV file.
@@ -32,9 +32,10 @@ def load_neos(neo_csv_path):
     with open(neo_csv_path, 'r') as c:
         reader = csv.DictReader(c)
         for row in reader:
-            neo_data.append(NearEarthObject(row))  # 2  (removed **row with row got error)
+            row_dict = {k: v for k, v in row.items() }            # variadic unpacking from **info 
+            # neo_data.append(NearEarthObject(**row))             # 2  (removed **row with row got error)
+            neo_data.append( row_dict )
     return neo_data
-
 
 def load_approaches(cad_json_path):
     """Read close approach data from a JSON file.
@@ -45,6 +46,6 @@ def load_approaches(cad_json_path):
     with open(cad_json_path, 'r') as j: 
         row = json.load(j)
         for approaches in row['data']:                       
-            approaches = dict(zip(row['fields'], approaches))    # 1
-            cad_data.append(CloseApproach(**approaches))    # 1  
+            approaches = dict(zip(row['fields'], approaches))    # 1  (not sure if I need to do variadic unpacking)
+            cad_data.append(CloseApproach(**approaches))         # 1  
     return cad_data
