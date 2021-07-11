@@ -212,9 +212,9 @@ def limit(iterator, n=None):
     :yield: The first (at most) `n` values from the iterator.
     """
     if n == 0 or n == None:
-        return 
-    if n: 
-        return itertools.islice(iterator, n)    # 3  (use islice from itertools)
+        return iterator
+
+    return itertools.islice(iterator, n)    # 3  (use islice from itertools)
     
     # a = iter(iterator(range(n)))  # 1
     #for _ in a:

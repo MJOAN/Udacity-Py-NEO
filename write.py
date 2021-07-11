@@ -56,7 +56,7 @@ def write_to_json(results, filename):
     close_approaches = [] 
     for result in results: 
         close_approaches_dict = { 
-                'datetime_utc': datetime_to_str( result.time ),          
+                'datetime_utc': result.time,      # unable to use datetime_str() TypeError: Object of type 'method' is not JSON serializable          
                 'distance_au': result.distance, 
                 'velocity_km_s': result.velocity,
                 'neo': { 
