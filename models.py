@@ -19,6 +19,9 @@ You'll edit this file in Task 1.
 """
 from helpers import cd_to_datetime, datetime_to_str
 
+########### Code References: ####################################################################
+## 1. Shuaishuai, Udacity Mentor Board, Reference: https://knowledge.udacity.com/questions/613929
+##################################################################################################
 
 class NearEarthObject:
     """A near-Earth object (NEO).
@@ -32,19 +35,28 @@ class NearEarthObject:
     initialized to an empty collection, but eventually populated in the
     `NEODatabase` constructor.
     """
-    def __init__(self, **info):
+    def __init__(self, designation, name=None, diameter=float('nan'), hazardous=False):
         """NearEarthObject class constructor
             :param designation (required): Primary designation of `NearEarthObject`
             :param name (optional/None): IAU name of `NearEarthObject
             :param diameter (optional, float/km): Diameter, in kilometers, of `NearEarthObject`
             :param hazardous (boolean): `NearEarthObject` if hazardous
         """
-        self.designation = info['designation']
-        self.name = info['name'] if info['name'] else None 
-        self.diameter = float(info['diameter']) if info['diameter'] else float('nan') 
-        self.hazardous = info['hazardous'] = 'Y'
+        
+        self.designation = designation
+        self.name = name if name else None 
+        self.diameter = float(diameter) if diameter else float('nan') 
+        
+        if not hazardous:                                                    #  1
+            self.hazardous = False
+        else:
+            if hazardous == 'N':
+                self.hazardous = False
+            else:
+                self.hazardous = True
+        
         self.approaches = []
-               
+        
     @property
     def fullname(self):
         """Return a representation of the full name of this NEO."""
@@ -85,19 +97,19 @@ class CloseApproach(NearEarthObject):
     private attribute, but the referenced NEO is eventually replaced in the
     `NEODatabase` constructor.
     """
-    def __init__(self, **info):
+    def __init__(self, designation, time=None, distance=float('nan'), velocity=float('nan') ):
         """CloseApproach class constructor
             :param _designation (private, required): Primary designation of `NearEarthObject`
             :param time (datetime): Datetime UTC of `NearEarthObject` closest approach to Earth 
             :param distance (float): Distance in astronomical units (au) `NearEarthObject` closest point to Earth 
             :param velocity (float): Velocity in kilometers per second (kms) `NearEarthObject` closest point to Earth
         """
-        self._designation = info['des']
-        self.time = cd_to_datetime(info['time']) if info['time'] else None 
-        self.distance = float(info['distance']) if info['distance'] else float('nan')      
-        self.velocity = float(info['velocity']) if info['velocity'] else float('nan')  
+        self._designation = designation
+        self.time = cd_to_datetime(time) if time else None 
+        self.distance = float(distance) if distance else float('nan')      
+        self.velocity = float(velocity) if velocity else float('nan')  
         self.neo = None
-        
+
     @property
     def time_str(self):
         """Return a formatted representation of this `CloseApproach`'s approach time.
@@ -112,7 +124,7 @@ class CloseApproach(NearEarthObject):
         in serialization to CSV and JSON files.
         """
         return f"NEO {NearEarthObject.fullname} had it's closest point near Earth on {datetime_to_str(self.time)}."
-    
+
         def name(self):
             return NearEarthObject.fullname
 

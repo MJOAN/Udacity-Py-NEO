@@ -19,7 +19,6 @@ from models import NearEarthObject, CloseApproach
 
 ######### Code References ###########################################################
 ## 1. Vanina W, Udacity Mentor Board, https://knowledge.udacity.com/questions/465782
-## 2. Vanina W, Udacity Mentor Board, https://knowledge.udacity.com/questions/461587
 #####################################################################################
 
 def load_neos(neo_csv_path):
@@ -32,9 +31,11 @@ def load_neos(neo_csv_path):
     with open(neo_csv_path, 'r') as c:
         reader = csv.DictReader(c)
         for row in reader:
-            row_dict = {k: v for k, v in row.items() }            # variadic unpacking from **info 
-            # neo_data.append(NearEarthObject(**row))             # 2  (removed **row with row got error)
-            neo_data.append( row_dict )
+            designation = row['pdes']
+            name= row['name']
+            diameter = row['diameter']
+            hazardous = row['pha']      
+            neo_data.append( NearEarthObject( designation, name, diameter, hazardous )  )
     return neo_data
 
 def load_approaches(cad_json_path):

@@ -17,6 +17,7 @@ from filters import AttributeFilter, DateFilter, DistanceFilter, VelocityFilter,
 ########### Code References: ####################################################################
 ## 1. Vanina W., Udacity Mentor Board, Reference: https://knowledge.udacity.com/questions/478946
 ## 2. Shuaishuai, Udacity Mentor Board, Reference: https://knowledge.udacity.com/questions/599130 
+## 3. Mustafa, Udacity Mentor Board, Reference: https://knowledge.udacity.com/questions/633232
 ##################################################################################################
 
 class NEODatabase:
@@ -83,17 +84,18 @@ class NEODatabase:
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
 
-        result = []
+        #result = []
         # iterate over NEO list of dict designation #s
-        for item in self._neo_designations:
+        # for item in self._neo_designations:
             # if NEO disignation == user input 
-            if item['designation'] == designation:
+            #if item['designation'] == designation:
                 # find match in NEO object and return NEO object
-                if self._neos['pdes'] == item['designation']:
-                    return neo
+                #if self._neos['pdes'] == item['designation']:
+                    #return neo
                 
         # else return None
-        return None
+         return self._neo_designations.get(designation, None)
+
 
     def get_neo_by_name(self, name):
         """Find and return an NEO by its name. If no match is found, return `None` 
@@ -104,17 +106,17 @@ class NEODatabase:
         :param name: The name, as a string, of the NEO to search for.
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
-        result = []
+        # result = []
         # iterate over NEO list of dict names
-        for item in self._neo_designations:
+        # for item in self._neo_designations:
             # if NEO name == user input 
-            if item['name'] == name:
+            # if item['name'] == name:
                 # find match in NEO object and return NEO object
-                if self._neos['name'] == item['name']:
-                    return neo
+                # if self._neos['name'] == item['name']:
+                   # return neo
                 
         # else return None
-        return None
+        return self._neo_names.get(name, None)
 
     def query(self, filters=()):
         """Query close approaches to generate those that match a collection of filters.
@@ -126,21 +128,41 @@ class NEODatabase:
         :param filters: A collection of filters capturing user-specified criteria.
         :return: A stream of matching `CloseApproach` objects.
         """
-        # Generate `CloseApproach` objects that match all of the filters.
-        # TODO: flag to set status if filter is None else yield approach
-        # TODO: use get_neo_by_designation? 
-        flag = True 
+        
+        for approach in self._approaches:     # 3      
+            flag = True
+            for f in filters:        
+                if not f(approach):
+                    flag = False
+                    break
+            if flag:
+                yield approach
+        
 
-        for approach in self._approaches:
-            if AttributeFilter.DateFilter(approach):
-                continue
-            if AttributeFilter.DistancerFilter(approach):
-                continue
-            if AttributeFilter.VelocityFilter(approach):
-                continue
-            if AttributeFilter.DiameterFilter(approach):
-                continue
-            if AttributeFilter.HazardousFilter(approach):
-                continue
-    
-            yield approach
+        # ## 2nd attempt
+        # if filters['date'] is not None: 
+        #     if approach.time.date() == filters['date']:
+        #             continue
+        #     if filters['date'] is not None: 
+        #         if approach.time.date() <= filters['end_date']:
+        #             continue
+        #     if filters['date'] is not None: 
+        #         if approach.time.date() >= filters['start_date']:
+        #             continue
+        #     if filters['distance_min'] is not None: 
+        #         if approach.distance <= filters['distance_min']:
+        #             continue
+        #     if filters['distance_max'] is not None: 
+        #         if approach.distance >= filters['distance_max']:
+        #             continue
+        #     if filters['velocity_min'] is not None: 
+        #         if approach.velocity <= filters['velocity_min']:
+        #             continue
+        #     if filters['velocity_max'] is not None: 
+        #         if approach.velocity == filters['velocity_max']:
+        #             continue
+        #     if approach.neo.hazardous == filters['hazardous']:
+        #         continue    
+            
+        #     yield approach
+
