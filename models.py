@@ -1,5 +1,4 @@
-"""Represent models for near-Earth objects and their close approaches.
-
+"""
 The `NearEarthObject` class represents a near-Earth object. Each has a unique
 primary designation, an optional unique name, an optional diameter, and a flag
 for whether the object is potentially hazardous.
@@ -24,37 +23,28 @@ from helpers import cd_to_datetime, datetime_to_str
 ##################################################################################################
 
 class NearEarthObject:
-    """A near-Earth object (NEO).
-
-    An NEO encapsulates semantic and physical parameters about the object, such
-    as its primary designation (required, unique), IAU name (optional), diameter
-    in kilometers (optional - sometimes unknown), and whether it's marked as
+    """
+    NEO encapsulates semantic, physical parameters about object, e.g.
+    its primary designation (required, unique), IAU name (optional), diameter
+    in km (optional - sometimes unknown), and whether it's marked as
     potentially hazardous to Earth.
 
-    A `NearEarthObject` also maintains a collection of its close approaches -
+    A `NearEarthObject` also maintains a collection of its close approaches
     initialized to an empty collection, but eventually populated in the
-    `NEODatabase` constructor.
+    `NEODatabase` constructor below
     """
     def __init__(self, designation, name=None, diameter=float('nan'), hazardous=False):
-        """NearEarthObject class constructor
-            :param designation (required): Primary designation of `NearEarthObject`
+        """
+            :param designation (required): Primary designation `NearEarthObject`
             :param name (optional/None): IAU name of `NearEarthObject
-            :param diameter (optional, float/km): Diameter, in kilometers, of `NearEarthObject`
+            :param diameter (optional, float/km): Diameter, in km, `NearEarthObject`
             :param hazardous (boolean): `NearEarthObject` if hazardous
         """
         
         self.designation = designation
         self.name = name if name else None 
         self.diameter = float(diameter) if diameter else float('nan') 
-        
-        if not hazardous:                                                    #  1
-            self.hazardous = False
-        else:
-            if hazardous == 'N':
-                self.hazardous = False
-            else:
-                self.hazardous = True
-        
+        self.hazardous = hazardous == "Y"
         self.approaches = []
         
     @property
@@ -83,26 +73,24 @@ class NearEarthObject:
         return (f"NearEarthObject(designation={self.designation!r}, name={self.name!r}, "
                 f"diameter={self.diameter!r}, hazardous={self.hazardous!r})")
 
-
 class CloseApproach(NearEarthObject):
-    """A close approach to Earth by an NEO.
-
-    A `CloseApproach` encapsulates information about the NEO's close approach to
+    """
+    `CloseApproach` encapsulates information about NEO's close approach to
     Earth, such as the date and time (in UTC) of closest approach, the nominal
     approach distance in astronomical units, and the relative approach velocity
     in kilometers per second.
 
-    A `CloseApproach` also maintains a reference to its `NearEarthObject` -
-    initally, this information (the NEO's primary designation) is saved in a
-    private attribute, but the referenced NEO is eventually replaced in the
+    `CloseApproach` maintains a reference to its `NearEarthObject`
+    initally, this information (the NEO's primary designation) is a
+    private attribute, but the referenced NEO is eventually replaced in
     `NEODatabase` constructor.
     """
     def __init__(self, designation, time=None, distance=float('nan'), velocity=float('nan') ):
-        """CloseApproach class constructor
-            :param _designation (private, required): Primary designation of `NearEarthObject`
-            :param time (datetime): Datetime UTC of `NearEarthObject` closest approach to Earth 
-            :param distance (float): Distance in astronomical units (au) `NearEarthObject` closest point to Earth 
-            :param velocity (float): Velocity in kilometers per second (kms) `NearEarthObject` closest point to Earth
+        """
+            :param _designation (private, required): Designation of `NearEarthObject`
+            :param time (datetime): Datetime UTC of `NearEarthObject` 
+            :param distance (float): Distance in astronomical (au) `NearEarthObject` 
+            :param velocity (float): Velocity in km per second (kms) `NearEarthObject`
         """
         self._designation = designation
         self.time = cd_to_datetime(time) if time else None 
@@ -112,21 +100,20 @@ class CloseApproach(NearEarthObject):
 
     @property
     def time_str(self):
-        """Return a formatted representation of this `CloseApproach`'s approach time.
-
-        The value in `self.time` should be a Python `datetime` object. While a
-        `datetime` object has a string representation, the default representation
-        includes seconds - significant figures that don't exist in our input
+        """
+        Value in `self.time` should be a Python `datetime` object. 
+        A `datetime` object has a default string representation
+        includes seconds significant figures that don't exist in our input
         data set.
 
         The `datetime_to_str` method converts a `datetime` object to a
-        formatted string that can be used in human-readable representations and
+        formatted string used in human-readable representations and
         in serialization to CSV and JSON files.
         """
-        return f"NEO {NearEarthObject.fullname} had it's closest point near Earth on {datetime_to_str(self.time)}."
+        return datetime_to_str(self.time)
 
         def name(self):
-            return NearEarthObject.fullname
+            return self.neo.fullname
 
         def time(self):
             return self.time
@@ -142,7 +129,8 @@ class CloseApproach(NearEarthObject):
 
     def __str__(self):
         """Return `str(self)`."""
-        return f"NEO {self.name} has a distance of {self.diameter} and velocity at {self.velocity}."
+        return (f"On {self.time}, {self.name}, approaches Earth at a distance of {self.diameter} " 
+                f" and velocity at {self.velocity}.")
   
 
     def __repr__(self):
