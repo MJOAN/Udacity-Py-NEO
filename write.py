@@ -35,7 +35,7 @@ def write_to_csv(results, filename):
         
         for result in results:
             reader.writerow(
-            {                                                                 # 3
+                {                                                                 # 3
                 'datetime_utc': datetime_to_str( result.time ),
                 'distance_au': result.distance,
                 'velocity_km_s': result.velocity,
@@ -43,7 +43,8 @@ def write_to_csv(results, filename):
                 'name': result.name,
                 'diameter_km': result.diameter,
                 'potentially_hazardous': result.hazardous
-            })
+                }
+            )
 
 def write_to_json(results, filename):
     """Write an iterable of `CloseApproach` objects to a JSON file.
