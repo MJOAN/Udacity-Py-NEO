@@ -45,6 +45,10 @@ def load_approaches(cad_json_path):
     with open(cad_json_path, 'r') as j: 
         row = json.load(j)
         for approaches in row['data']:                       
-            approaches = dict(zip(row['fields'], approaches))                   # 1 
-            cad_data.append(CloseApproach(**approaches))                        # 1  
+            approaches = dict(zip(row['fields'], approaches))
+            des = approaches['des']
+            time= approaches['cd']
+            distance = approaches['dist']
+            velocity = approaches['v_rel']
+            cad_data.append( CloseApproach(des, time, distance, velocity))
     return cad_data

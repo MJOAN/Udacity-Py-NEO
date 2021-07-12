@@ -52,18 +52,6 @@ class NearEarthObject:
         """Return a representation of the full name of this NEO."""
         return f"{self.designation} {self.name}"
 
-    def designation(self):
-        return self.designation
-
-    def name(self):
-        return self.name
-
-    def diameter(self):
-        return self.diameter
-
-    def hazardous(self):
-        return self.hazardous
-
     def __str__(self):
         """Return `str(self)`."""
         return f"NEO {self.fullname} has a diameter {self.diameter} km and is {self.hazardous} hazardous."
@@ -112,27 +100,14 @@ class CloseApproach(NearEarthObject):
         """
         return datetime_to_str(self.time)
 
-        def name(self):
-            return self.neo.fullname
-
-        def time(self):
-            return self.time
-
-        def distance(self):
-            return self.distance
-
-        def velocity(self):
-            return self.velocity
-        
-        def neo(self):
-            return self.neo
+    def name(self):
+        return self.neo.fullname
 
     def __str__(self):
         """Return `str(self)`."""
         return (f"On {self.time}, {self.name}, approaches Earth at a distance of {self.diameter} " 
                 f" and velocity at {self.velocity}.")
-  
-
+            
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
         return (f"CloseApproach(time={self.time_str!r}, distance={self.distance!r}, "

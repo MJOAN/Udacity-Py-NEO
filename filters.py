@@ -130,38 +130,36 @@ def create_filters(date=None, start_date=None, end_date=None,
     :return: A collection of filters for use with `query`.
     """
     result = [] 
-    filter_args = locals().items()
 
-    for key, value in filter_args.items():
-       if date is not None:
-            result.append( DateFilter(operator.eq, filter_args.get('date')))                    # 2
+    if date is not None:
+        result.append( DateFilter(operator.eq, date))                  
 
-        if start_date is not None:
-            result.append( DateFilter(operator.ge, filter_args.get('start_date')))
+    if start_date is not None:
+        result.append( DateFilter(operator.ge, start_date))
 
-        if end_date is not None:
-            result.append( DateFilter(operator.le, filter_args.get('end_date')))
+    if end_date is not None:
+        result.append( DateFilter(operator.le, end_date)
 
-        if distance_min is not None:
-            result.append( DistanceFilter(operator.ge, filter_args.get('distance_min')))
+    if distance_min is not None:
+        result.append( DistanceFilter(operator.ge, distance_min))
 
-        if distance_max is not None:
-            result.append( DistanceFilter(operator.le, filter_args.get('distance_max')))
+    if distance_max is not None:
+        result.append( DistanceFilter(operator.le, distance_max))
 
-        if velocity_min is not None:
-            result.append( VelocityFilter(operator.ge, filter_args.get('velocity_min')))
+    if velocity_min is not None:
+        result.append( VelocityFilter(operator.ge, velocity_min))
 
-        if velocity_max is not None:
-            result.append( VelocityFilter(operator.le, filter_args.get('velocity_max')))
+    if velocity_max is not None:
+        result.append( VelocityFilter(operator.le, velocity_max))
 
-        if diameter_min is not None:
-            result.append( DiameterFilter(operator.ge, filter_args.get('diameter_min')))
+    if diameter_min is not None:
+        result.append( DiameterFilter(operator.ge, diameter_min))
 
-        if diameter_max is not None:
-            result.append( DiameterFilter(operator.le, filter_args.get('diameter_max')))
-                           
-        if hazardous is not None:
-            result.append( HazardousFilter(operator.eq, filter_args.get('hazardous')))
+    if diameter_max is not None:
+        result.append( DiameterFilter(operator.le, diameter_max))
+                        
+    if hazardous is not None:
+        result.append( HazardousFilter(operator.eq, hazardous))
             
     return result
 
@@ -177,7 +175,7 @@ def limit(iterator, n=None):
     """
     if n == 0 or n == None:
         return iterator
-
+        
     return itertools.islice(iterator, n)                    # 3
       
 
